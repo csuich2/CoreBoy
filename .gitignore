@@ -1,5 +1,6 @@
 roms/
 obj/
+*.lock.json
 
 #################
 ## Eclipse
