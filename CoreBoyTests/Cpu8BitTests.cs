@@ -5,12 +5,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace CoreBoyTests
 {
     [TestClass]
-    public class Cpu8BitTests
+    public class Cpu8BitTests : CpuTestBase
     {
         [TestMethod]
         public void TestLoadImmediates()
         {
-            var test = new byte[]
+            test = new byte[]
             {
                 0x06, // Load into b
                 0xf0,
@@ -26,10 +26,7 @@ namespace CoreBoyTests
                 0xf5,
             };
 
-            var cpu = new Cpu(0x0)
-            {
-                Rom = test
-            };
+            InitCpu();
 
             Assert.AreEqual(cpu.b, 0, $"register b should have been initialized to 0");
             Assert.AreEqual(cpu.c, 0, $"register c should have been initialized to 0");
@@ -40,18 +37,18 @@ namespace CoreBoyTests
 
             cpu.Run();
 
-            Assert.AreEqual(cpu.b, 0xf0, $"register b should have set");
-            Assert.AreEqual(cpu.c, 0xf1, $"register c should have set");
-            Assert.AreEqual(cpu.d, 0xf2, $"register d should have set");
-            Assert.AreEqual(cpu.e, 0xf3, $"register e should have set");
-            Assert.AreEqual(cpu.h, 0xf4, $"register h should have set");
-            Assert.AreEqual(cpu.l, 0xf5, $"register l should have set");
+            Assert.AreEqual(cpu.b, 0xf0, $"register b loaded the wrong value");
+            Assert.AreEqual(cpu.c, 0xf1, $"register c loaded the wrong value");
+            Assert.AreEqual(cpu.d, 0xf2, $"register d loaded the wrong value");
+            Assert.AreEqual(cpu.e, 0xf3, $"register e loaded the wrong value");
+            Assert.AreEqual(cpu.h, 0xf4, $"register h loaded the wrong value");
+            Assert.AreEqual(cpu.l, 0xf5, $"register l loaded the wrong value");
         }
 
         [TestMethod]
         public void TestLoadIntoA()
         {
-            var test = new byte[]
+            test = new byte[]
             {
                 0x7f, // a -> a
                 0x78, // b -> a
@@ -66,10 +63,7 @@ namespace CoreBoyTests
                 0xe0,
             };
 
-            var cpu = new Cpu(0x0)
-            {
-                Rom = test
-            };
+            InitCpu();
 
             var aValue = (byte)0xd0;
             var bValue = (byte)0xd1;
@@ -92,34 +86,34 @@ namespace CoreBoyTests
             };
 
             step();
-            Assert.AreEqual(aValue, cpu.a, $"register a should have been set");
+            Assert.AreEqual(aValue, cpu.a, $"register a loaded the wrong value");
 
             step();
-            Assert.AreEqual(bValue, cpu.a, $"register a should have been set");
+            Assert.AreEqual(bValue, cpu.a, $"register a loaded the wrong value");
 
             step();
-            Assert.AreEqual(cValue, cpu.a, $"register a should have been set");
+            Assert.AreEqual(cValue, cpu.a, $"register a loaded the wrong value");
 
             step();
-            Assert.AreEqual(dValue, cpu.a, $"register a should have been set");
+            Assert.AreEqual(dValue, cpu.a, $"register a loaded the wrong value");
 
             step();
-            Assert.AreEqual(eValue, cpu.a, $"register a should have been set");
+            Assert.AreEqual(eValue, cpu.a, $"register a loaded the wrong value");
 
             step();
-            Assert.AreEqual(hValue, cpu.a, $"register a should have been set");
+            Assert.AreEqual(hValue, cpu.a, $"register a loaded the wrong value");
 
             step();
-            Assert.AreEqual(lValue, cpu.a, $"register a should have been set");
+            Assert.AreEqual(lValue, cpu.a, $"register a loaded the wrong value");
 
             step();
-            Assert.AreEqual(0xe0, cpu.a, $"register a should have been set");
+            Assert.AreEqual(0xe0, cpu.a, $"register a loaded the wrong value");
         }
 
         [TestMethod]
         public void TestLoadIntoB()
         {
-            var test = new byte[]
+            test = new byte[]
             {
                 0x40, // b -> b
                 0x41, // c -> b
@@ -130,10 +124,7 @@ namespace CoreBoyTests
                 // TODO test 0x46
             };
 
-            var cpu = new Cpu(0x0)
-            {
-                Rom = test
-            };
+            InitCpu();
 
             var bValue = (byte)0xd1;
             var cValue = (byte)0xd2;
@@ -155,28 +146,28 @@ namespace CoreBoyTests
             };
 
             step();
-            Assert.AreEqual(bValue, cpu.b, $"register b should have been set");
+            Assert.AreEqual(bValue, cpu.b, $"register b loaded the wrong value");
 
             step();
-            Assert.AreEqual(cValue, cpu.b, $"register b should have been set");
+            Assert.AreEqual(cValue, cpu.b, $"register b loaded the wrong value");
 
             step();
-            Assert.AreEqual(dValue, cpu.b, $"register b should have been set");
+            Assert.AreEqual(dValue, cpu.b, $"register b loaded the wrong value");
 
             step();
-            Assert.AreEqual(eValue, cpu.b, $"register b should have been set");
+            Assert.AreEqual(eValue, cpu.b, $"register b loaded the wrong value");
 
             step();
-            Assert.AreEqual(hValue, cpu.b, $"register b should have been set");
+            Assert.AreEqual(hValue, cpu.b, $"register b loaded the wrong value");
 
             step();
-            Assert.AreEqual(lValue, cpu.b, $"register b should have been set");
+            Assert.AreEqual(lValue, cpu.b, $"register b loaded the wrong value");
         }
 
         [TestMethod]
         public void TestLoadIntoC()
         {
-            var test = new byte[]
+            test = new byte[]
             {
                 0x49, // c -> c
                 0x48, // b -> c
@@ -187,10 +178,7 @@ namespace CoreBoyTests
                 // TODO test 0x4e
             };
 
-            var cpu = new Cpu(0x0)
-            {
-                Rom = test
-            };
+            InitCpu();
 
             var bValue = (byte)0xd1;
             var cValue = (byte)0xd2;
@@ -212,28 +200,28 @@ namespace CoreBoyTests
             };
 
             step();
-            Assert.AreEqual(cValue, cpu.c, $"register c should have been set");
+            Assert.AreEqual(cValue, cpu.c, $"register c loaded the wrong value");
 
             step();
-            Assert.AreEqual(bValue, cpu.c, $"register c should have been set");
+            Assert.AreEqual(bValue, cpu.c, $"register c loaded the wrong value");
 
             step();
-            Assert.AreEqual(dValue, cpu.c, $"register c should have been set");
+            Assert.AreEqual(dValue, cpu.c, $"register c loaded the wrong value");
 
             step();
-            Assert.AreEqual(eValue, cpu.c, $"register c should have been set");
+            Assert.AreEqual(eValue, cpu.c, $"register c loaded the wrong value");
 
             step();
-            Assert.AreEqual(hValue, cpu.c, $"register c should have been set");
+            Assert.AreEqual(hValue, cpu.c, $"register c loaded the wrong value");
 
             step();
-            Assert.AreEqual(lValue, cpu.c, $"register c should have been set");
+            Assert.AreEqual(lValue, cpu.c, $"register c loaded the wrong value");
         }
 
         [TestMethod]
         public void TestLoadIntoD()
         {
-            var test = new byte[]
+            test = new byte[]
             {
                 0x52, // d -> d
                 0x50, // b -> d
@@ -244,10 +232,7 @@ namespace CoreBoyTests
                 // TODO test 0x56
             };
 
-            var cpu = new Cpu(0x0)
-            {
-                Rom = test
-            };
+            InitCpu();
 
             var bValue = (byte)0xd1;
             var cValue = (byte)0xd2;
@@ -269,28 +254,28 @@ namespace CoreBoyTests
             };
 
             step();
-            Assert.AreEqual(dValue, cpu.d, $"register d should have been set");
+            Assert.AreEqual(dValue, cpu.d, $"register d loaded the wrong value");
 
             step();
-            Assert.AreEqual(bValue, cpu.d, $"register d should have been set");
+            Assert.AreEqual(bValue, cpu.d, $"register d loaded the wrong value");
 
             step();
-            Assert.AreEqual(cValue, cpu.d, $"register d should have been set");
+            Assert.AreEqual(cValue, cpu.d, $"register d loaded the wrong value");
 
             step();
-            Assert.AreEqual(eValue, cpu.d, $"register d should have been set");
+            Assert.AreEqual(eValue, cpu.d, $"register d loaded the wrong value");
 
             step();
-            Assert.AreEqual(hValue, cpu.d, $"register d should have been set");
+            Assert.AreEqual(hValue, cpu.d, $"register d loaded the wrong value");
 
             step();
-            Assert.AreEqual(lValue, cpu.d, $"register d should have been set");
+            Assert.AreEqual(lValue, cpu.d, $"register d loaded the wrong value");
         }
 
         [TestMethod]
         public void TestLoadIntoE()
         {
-            var test = new byte[]
+            test = new byte[]
             {
                 0x5b, // e -> e
                 0x58, // b -> e
@@ -301,10 +286,7 @@ namespace CoreBoyTests
                 // TODO test 0x5e
             };
 
-            var cpu = new Cpu(0x0)
-            {
-                Rom = test
-            };
+            InitCpu();
 
             var bValue = (byte)0xd1;
             var cValue = (byte)0xd2;
@@ -326,28 +308,28 @@ namespace CoreBoyTests
             };
 
             step();
-            Assert.AreEqual(eValue, cpu.e, $"register e should have been set");
+            Assert.AreEqual(eValue, cpu.e, $"register e loaded the wrong value");
 
             step();
-            Assert.AreEqual(bValue, cpu.e, $"register e should have been set");
+            Assert.AreEqual(bValue, cpu.e, $"register e loaded the wrong value");
 
             step();
-            Assert.AreEqual(cValue, cpu.e, $"register e should have been set");
+            Assert.AreEqual(cValue, cpu.e, $"register e loaded the wrong value");
 
             step();
-            Assert.AreEqual(dValue, cpu.e, $"register e should have been set");
+            Assert.AreEqual(dValue, cpu.e, $"register e loaded the wrong value");
 
             step();
-            Assert.AreEqual(hValue, cpu.e, $"register e should have been set");
+            Assert.AreEqual(hValue, cpu.e, $"register e loaded the wrong value");
 
             step();
-            Assert.AreEqual(lValue, cpu.e, $"register e should have been set");
+            Assert.AreEqual(lValue, cpu.e, $"register e loaded the wrong value");
         }
 
         [TestMethod]
         public void TestLoadIntoH()
         {
-            var test = new byte[]
+            test = new byte[]
             {
                 0x64, // h -> h
                 0x60, // b -> h
@@ -358,10 +340,7 @@ namespace CoreBoyTests
                 // TODO test 0x66
             };
 
-            var cpu = new Cpu(0x0)
-            {
-                Rom = test
-            };
+            InitCpu();
 
             var bValue = (byte)0xd1;
             var cValue = (byte)0xd2;
@@ -383,28 +362,28 @@ namespace CoreBoyTests
             };
 
             step();
-            Assert.AreEqual(hValue, cpu.h, $"register h should have been set");
+            Assert.AreEqual(hValue, cpu.h, $"register h loaded the wrong value");
 
             step();
-            Assert.AreEqual(bValue, cpu.h, $"register h should have been set");
+            Assert.AreEqual(bValue, cpu.h, $"register h loaded the wrong value");
 
             step();
-            Assert.AreEqual(cValue, cpu.h, $"register h should have been set");
+            Assert.AreEqual(cValue, cpu.h, $"register h loaded the wrong value");
 
             step();
-            Assert.AreEqual(dValue, cpu.h, $"register h should have been set");
+            Assert.AreEqual(dValue, cpu.h, $"register h loaded the wrong value");
 
             step();
-            Assert.AreEqual(eValue, cpu.h, $"register h should have been set");
+            Assert.AreEqual(eValue, cpu.h, $"register h loaded the wrong value");
 
             step();
-            Assert.AreEqual(lValue, cpu.h, $"register h should have been set");
+            Assert.AreEqual(lValue, cpu.h, $"register h loaded the wrong value");
         }
 
         [TestMethod]
         public void TestLoadIntoL()
         {
-            var test = new byte[]
+            test = new byte[]
             {
                 0x6d, // l -> l
                 0x68, // b -> l
@@ -415,10 +394,7 @@ namespace CoreBoyTests
                 // TODO test 0x6e
             };
 
-            var cpu = new Cpu(0x0)
-            {
-                Rom = test
-            };
+            InitCpu();
 
             var bValue = (byte)0xd1;
             var cValue = (byte)0xd2;
@@ -440,22 +416,22 @@ namespace CoreBoyTests
             };
 
             step();
-            Assert.AreEqual(lValue, cpu.l, $"register l should have been set");
+            Assert.AreEqual(lValue, cpu.l, $"register l loaded the wrong value");
 
             step();
-            Assert.AreEqual(bValue, cpu.l, $"register l should have been set");
+            Assert.AreEqual(bValue, cpu.l, $"register l loaded the wrong value");
 
             step();
-            Assert.AreEqual(cValue, cpu.l, $"register l should have been set");
+            Assert.AreEqual(cValue, cpu.l, $"register l loaded the wrong value");
 
             step();
-            Assert.AreEqual(dValue, cpu.l, $"register l should have been set");
+            Assert.AreEqual(dValue, cpu.l, $"register l loaded the wrong value");
 
             step();
-            Assert.AreEqual(eValue, cpu.l, $"register l should have been set");
+            Assert.AreEqual(eValue, cpu.l, $"register l loaded the wrong value");
 
             step();
-            Assert.AreEqual(hValue, cpu.l, $"register l should have been set");
+            Assert.AreEqual(hValue, cpu.l, $"register l loaded the wrong value");
         }
 
         // TODO test 70 - 75, 36
@@ -463,7 +439,7 @@ namespace CoreBoyTests
         [TestMethod]
         public void TestLoadAInto()
         {
-            var test = new byte[]
+            test = new byte[]
             {
                 0x7f, // a -> a
                 0x47, // a -> b
@@ -475,10 +451,7 @@ namespace CoreBoyTests
                 // TODO test 02, 12, 77, ea
             };
 
-            var cpu = new Cpu(0x0)
-            {
-                Rom = test
-            };
+            InitCpu();
 
             var aValue = (byte)0xd0;
             var bValue = (byte)0xd1;
@@ -503,30 +476,60 @@ namespace CoreBoyTests
             };
 
             step(aValue);
-            Assert.AreEqual(aValue, cpu.a, $"register a should have set");
+            Assert.AreEqual(aValue, cpu.a, $"register a loaded the wrong value");
 
             step(bValue);
-            Assert.AreEqual(bValue, cpu.b, $"register b should have set");
+            Assert.AreEqual(bValue, cpu.b, $"register b loaded the wrong value");
 
             step(cValue);
-            Assert.AreEqual(cValue, cpu.c, $"register c should have set");
+            Assert.AreEqual(cValue, cpu.c, $"register c loaded the wrong value");
 
             step(dValue);
-            Assert.AreEqual(dValue, cpu.d, $"register d should have set");
+            Assert.AreEqual(dValue, cpu.d, $"register d loaded the wrong value");
 
             step(eValue);
-            Assert.AreEqual(eValue, cpu.e, $"register e should have set");
+            Assert.AreEqual(eValue, cpu.e, $"register e loaded the wrong value");
 
             step(hValue);
-            Assert.AreEqual(hValue, cpu.h, $"register h should have set");
+            Assert.AreEqual(hValue, cpu.h, $"register h loaded the wrong value");
 
             step(lValue);
-            Assert.AreEqual(lValue, cpu.l, $"register l should have set");
+            Assert.AreEqual(lValue, cpu.l, $"register l loaded the wrong value");
         }
 
-        // TODO test f2
+        [TestMethod]
+        public void TestLoadAddressCIntoA()
+        {
+            var expectedValue = (byte)0xd0;
+            test = new byte[ushort.MaxValue];
+            test[0x0000] = 0xf2;
+            test[0xff23] = expectedValue;
 
-        // TODO test e2
+            InitCpu();
+
+            cpu.c = 0x23;
+
+            cpu.RunOne();
+
+            Assert.AreEqual(expectedValue, cpu.a, "didn't load 0xff+regc into a");
+        }
+
+        [TestMethod]
+        public void TestLoadAIntoAddressC()
+        {
+            test = new byte[ushort.MaxValue];
+            test[0x0000] = 0xe2;
+
+            InitCpu();
+
+            var expectedValue = (byte)0xd0;
+            cpu.a = expectedValue;
+            cpu.c = 0x23;
+
+            cpu.RunOne();
+
+            Assert.AreEqual(expectedValue, test[0xff23], "didn't load a into 0xff+regc");
+        }
 
         // TODO test 3a
 
@@ -536,8 +539,37 @@ namespace CoreBoyTests
 
         // TODO test 22
 
-        // TODO test e0
+        [TestMethod]
+        public void TestLoadAIntoAddressN()
+        {
+            test = new byte[ushort.MaxValue];
+            test[0x0000] = 0xe0;
+            test[0x0001] = 0x23;
 
-        // TODO test f0
+            InitCpu();
+
+            var expectedValue = (byte)0xd0;
+            cpu.a = expectedValue;
+
+            cpu.RunOne();
+
+            Assert.AreEqual(expectedValue, test[0xff23], "didn't load a into 0xff+n");
+        }
+
+        [TestMethod]
+        public void TestLoadAddressNIntoA()
+        {
+            var expectedValue = (byte)0xd0;
+            test = new byte[ushort.MaxValue];
+            test[0x0000] = 0xf0;
+            test[0x0001] = 0x23;
+            test[0xff23] = expectedValue;
+
+            InitCpu();
+
+            cpu.RunOne();
+
+            Assert.AreEqual(expectedValue, cpu.a, "didn't load 0xff+n into a");
+        }
     }
 }

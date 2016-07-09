@@ -22,9 +22,8 @@ namespace CoreBoy
                 return (ushort) ((ushort)a << 8 | f);
             }
             set {
-                var temp = af - value;
-                a = (byte)(af >> 8);
-                f = (byte)(af & 0xff);
+                a = (byte)(value >> 8);
+                f = (byte)(value & 0xff);
             }
         }
 
@@ -33,9 +32,8 @@ namespace CoreBoy
                 return (ushort) ((ushort)b << 8 | c);
             }
             set {
-                var temp = bc - value;
-                b = (byte)(bc >> 8);
-                c = (byte)(bc & 0xff);
+                b = (byte)(value >> 8);
+                c = (byte)(value & 0xff);
             }
         }
 
@@ -44,9 +42,8 @@ namespace CoreBoy
                 return (ushort) ((ushort)d << 8 | e);
             }
             set {
-                var temp = de - value;
-                d = (byte)(de >> 8);
-                e = (byte)(de & 0xff);
+                d = (byte)(value >> 8);
+                e = (byte)(value & 0xff);
             }
         }
 
@@ -55,9 +52,8 @@ namespace CoreBoy
                 return (ushort) ((ushort)h << 8 | l);
             }
             set {
-                var temp = hl - value;
-                a = (byte)(hl >> 8);
-                f = (byte)(hl & 0xff);
+                h = (byte)(value >> 8);
+                l = (byte)(value & 0xff);
             }
         }
 
@@ -66,20 +62,20 @@ namespace CoreBoy
         // 7 6 5 4 3 2 1 0
         // Z N H C 0 0 0 0
         // Z = Zero - set when the result of a math op is zero or two values match with a compare
-        const byte FlagZero = 0x80;
+        public const byte FlagZero = 0x80;
         // N = Subtract - set if a subtraction was performed in the last math instruction
-        const byte FlagNegative = 0x40;
+        public const byte FlagNegative = 0x40;
         // H = Half Carry - set if a carry ocurred from the lower nibble in the last math instruction
-        const byte FlagHalfCarry = 0x20;
+        public const byte FlagHalfCarry = 0x20;
         // C = Carry - set if a carry occurred from the last math operation or if register A is smaller with a compare
-        const byte FlagCarry = 0x10;
+        public const byte FlagCarry = 0x10;
 
         public bool IsFlagSet(byte flag) { return (flags & flag) != 0; }
         public void SetFlag(byte flag) { flags |= flag; }
         public void ResetFlag(byte flag) { flags &= (byte)~flag; }
 
-        ushort pc = 0x0100; // Defaults to 100 hex
-        ushort sp = 0xfffe; // Initialized to fffe hex
+        public ushort pc = 0x0100; // Defaults to 100 hex
+        public ushort sp = 0xfffe; // Initialized to fffe hex
 
         // Memory
         byte[] Ram = new byte[8096];
@@ -140,31 +136,31 @@ namespace CoreBoy
             return Rom[pos];
         }
 
-        private ushort ReadShort(ushort pos)
+        public ushort ReadShort(ushort pos)
         {
-            return (ushort)(((ushort)Rom[pos]) << 8 & (ushort)Rom[pos+1]);
+            return (ushort)(((ushort)Rom[pos]) | (ushort)Rom[pos+1] << 8);
         }
 
         private void WriteByte(ushort pos, byte val)
         {
             // TODO This needs to do way more
-            Ram[pos] = val;
+            Rom[pos] = val;
         }
 
         private void WriteShort(ushort pos, ushort val)
         {
             // TODO This needs to do way more
-            Ram[pos] = (byte)(val & 0x00ff);
-            Ram[pos+1] = (byte)((val & 0xff00) >> 8);
+            Rom[pos] = (byte)(val & 0x00ff);
+            Rom[pos+1] = (byte)((val & 0xff00) >> 8);
         }
 
-        private void Push(ushort val)
+        public void Push(ushort val)
         {
             sp -= 2;
             WriteShort(sp, val);
         }
 
-        private ushort Pop()
+        public ushort Pop()
         {
             var temp = ReadShort(sp);
             sp += 2;
