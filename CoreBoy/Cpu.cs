@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace CoreBoy
@@ -8,14 +7,14 @@ namespace CoreBoy
         delegate void Instruction();
 
         // 8-bit registers
-        public byte a { get; private set; }
-        public byte b { get; private set; }
-        public byte c { get; private set; }
-        public byte d { get; private set; }
-        public byte e { get; private set; }
-        public byte f { get; private set; }
-        public byte h { get; private set; }
-        public byte l { get; private set; }
+        public byte a { get; set; }
+        public byte b { get; set; }
+        public byte c { get; set; }
+        public byte d { get; set; }
+        public byte e { get; set; }
+        public byte f { get; set; }
+        public byte h { get; set; }
+        public byte l { get; set; }
 
         // 16-bit "virtual" registers
         public ushort af {
@@ -85,13 +84,42 @@ namespace CoreBoy
         // Memory
         byte[] Ram = new byte[8096];
         byte[] VideoRam = new byte[8096];
-        byte[] Rom;
+        public byte[] Rom { get; set; }
         
         IDictionary<ushort, Instruction> Instructions = new Dictionary<ushort, Instruction>();
 
-        public void Run(byte[] rom)
+        public Cpu()
         {
-            Rom = rom;
+            SetupInstructions();
+        }
+
+        public Cpu(ushort pc) : this()
+        {
+            this.pc = pc;
+        }
+
+        public void Run()
+        {
+            while (HasNext())
+            {
+                RunOne();
+            }
+        }
+
+        public void RunOne()
+        {
+            if (!HasNext())
+            {
+                throw new System.Exception("End of rom");
+            }
+
+            var instr = ReadNextRomByte();
+            Instructions[instr]();
+        }
+
+        public bool HasNext()
+        {
+            return pc < Rom.Length;
         }
 
         private byte ReadNextRomByte()
@@ -208,8 +236,8 @@ namespace CoreBoy
             AddInstruction(0x57, () => d = a);
             AddInstruction(0x58, () => e = b);
             AddInstruction(0x59, () => e = c);
-            AddInstruction(0x5a, () => {});
-            AddInstruction(0x5b, () => e = d);
+            AddInstruction(0x5a, () => e = d);
+            AddInstruction(0x5b, () => {});
             AddInstruction(0x5c, () => e = h);
             AddInstruction(0x5d, () => e = l);
             AddInstruction(0x5e, () => e = ReadByte(hl));
@@ -218,8 +246,8 @@ namespace CoreBoy
             AddInstruction(0x60, () => h = b);
             AddInstruction(0x61, () => h = c);
             AddInstruction(0x62, () => h = d);
-            AddInstruction(0x64, () => h = e);
-            AddInstruction(0x63, () => {});
+            AddInstruction(0x63, () => h = e);
+            AddInstruction(0x64, () => {});
             AddInstruction(0x65, () => h = l);
             AddInstruction(0x66, () => h = ReadByte(hl));
             AddInstruction(0x67, () => h = a);
@@ -227,8 +255,8 @@ namespace CoreBoy
             AddInstruction(0x69, () => l = c);
             AddInstruction(0x6a, () => l = d);
             AddInstruction(0x6b, () => l = e);
-            AddInstruction(0x6c, () => {});
-            AddInstruction(0x6d, () => l = h);
+            AddInstruction(0x6c, () => l = h);
+            AddInstruction(0x6d, () => {});
             AddInstruction(0x6e, () => l = ReadByte(hl));
             AddInstruction(0x6f, () => l = a);
 
@@ -276,7 +304,7 @@ namespace CoreBoy
             AddInstruction(0xd1, () => de = Pop());
             AddInstruction(0xd5, () => Push(de));
 
-            AddInstruction(0x11, () => hl = Pop());
+            AddInstruction(0xe1, () => hl = Pop());
             AddInstruction(0xe5, () => Push(hl));
 
             AddInstruction(0xf1, () => af = Pop());
@@ -289,25 +317,25 @@ namespace CoreBoy
         {
             // 8-bit ALU
             AddInstruction(0x04, () => b = Inc(b));
-            AddInstruction(0x04, () => b = Dec(b));
+            AddInstruction(0x05, () => b = Dec(b));
             AddInstruction(0x0c, () => c = Inc(c));
-            AddInstruction(0x0c, () => c = Dec(c));
+            AddInstruction(0x0d, () => c = Dec(c));
 
             AddInstruction(0x3c, () => a = Inc(a));
-            AddInstruction(0x3c, () => a = Dec(a));
+            AddInstruction(0x3d, () => a = Dec(a));
 
             AddInstruction(0x14, () => d = Inc(d));
-            AddInstruction(0x14, () => d = Dec(d));
+            AddInstruction(0x15, () => d = Dec(d));
             AddInstruction(0x1c, () => e = Inc(e));
-            AddInstruction(0x1c, () => e = Dec(e));
+            AddInstruction(0x1d, () => e = Dec(e));
 
             AddInstruction(0x24, () => h = Inc(h));
-            AddInstruction(0x24, () => h = Dec(h));
+            AddInstruction(0x25, () => h = Dec(h));
             AddInstruction(0x2c, () => l = Inc(l));
-            AddInstruction(0x2c, () => l = Dec(l));
+            AddInstruction(0x2d, () => l = Dec(l));
 
             AddInstruction(0x34, () => WriteByte(hl, Inc(ReadByte(hl))));
-            AddInstruction(0x34, () => WriteByte(hl, Dec(ReadByte(hl))));
+            AddInstruction(0x35, () => WriteByte(hl, Dec(ReadByte(hl))));
 
             AddInstruction(0x80, () => Add(b));
             AddInstruction(0x81, () => Add(c));

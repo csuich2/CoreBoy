@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CoreBoy", "CoreBoy\CoreBoy.xproj", "{3648D36A-1F06-4997-A694-FA5CB7007FEF}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "CoreBoyTests", "CoreBoyTests\CoreBoyTests.xproj", "{412B53F9-9935-4F75-8619-91EC60832C21}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3648D36A-1F06-4997-A694-FA5CB7007FEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3648D36A-1F06-4997-A694-FA5CB7007FEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3648D36A-1F06-4997-A694-FA5CB7007FEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3648D36A-1F06-4997-A694-FA5CB7007FEF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{412B53F9-9935-4F75-8619-91EC60832C21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{412B53F9-9935-4F75-8619-91EC60832C21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{412B53F9-9935-4F75-8619-91EC60832C21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{412B53F9-9935-4F75-8619-91EC60832C21}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

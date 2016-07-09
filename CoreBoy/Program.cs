@@ -23,8 +23,11 @@ namespace CoreBoy
                 rom = romStream.ToArray();
             }
 
-            var cpu = new Cpu();
-            cpu.Run(rom);
+            var cpu = new Cpu()
+            {
+                Rom = rom
+            };
+            cpu.Run();
         }
     }
 }
