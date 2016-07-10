@@ -1,5 +1,4 @@
-﻿using System;
-using CoreBoy;
+﻿using CoreBoy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace CoreBoyTests
@@ -10,23 +9,21 @@ namespace CoreBoyTests
         [TestMethod]
         public void TestLoadImmediates()
         {
-            test = new byte[]
+            InitCpu(new byte[]
             {
                 0x01, // nn -> bc
-                0x11,
                 0x22,
+                0x11,
                 0x11, // nn -> de
-                0x33,
                 0x44,
+                0x33,
                 0x21, // nn -> hl
-                0x55,
                 0x66,
+                0x55,
                 0x31, // nn -> sp
-                0x77,
                 0x88,
-            };
-
-            InitCpu();
+                0x77,
+            });
 
             cpu.RunOne();
             Assert.AreEqual(0x1122, cpu.bc, "register bc loaded the wrong value");
@@ -44,12 +41,10 @@ namespace CoreBoyTests
         [TestMethod]
         public void TestLoadHlIntoSp()
         {
-            test = new byte[]
+            InitCpu(new byte[]
             {
                 0xf9, // hl -> sp
-            };
-
-            InitCpu();
+            });
 
             var expectedValue = (ushort)0xabcd;
             cpu.hl = expectedValue;
@@ -61,7 +56,7 @@ namespace CoreBoyTests
         [TestMethod]
         public void TestLoadSpNIntoHl()
         {
-            test = new byte[]
+            InitCpu(new byte[]
             {
                 0xf8, // sp+n -> hl, no carry, no half carry
                 0x34,
@@ -69,9 +64,7 @@ namespace CoreBoyTests
                 0xff,
                 0xf8, // sp+n -> hl, carry, half carry
                 0xff,
-            };
-
-            InitCpu();
+            });
 
             cpu.sp = 0x1200;
             cpu.SetFlag(Cpu.FlagZero | Cpu.FlagNegative | Cpu.FlagCarry | Cpu.FlagHalfCarry);
@@ -98,12 +91,11 @@ namespace CoreBoyTests
         [TestMethod]
         public void TestLoadSpIntoN()
         {
-            test = new byte[ushort.MaxValue];
-            test[0x0000] = 0x08;
-            test[0x0001] = 0xcd;
-            test[0x0002] = 0xab;
-
-            InitCpu();
+            InitCpu(new byte[] {
+                0x08,
+                0xcd,
+                0xab,
+            });
 
             var expectedValue = (ushort)0x1234;
             cpu.sp = expectedValue;
@@ -115,13 +107,12 @@ namespace CoreBoyTests
         [TestMethod]
         public void TestLoadOntoStack()
         {
-            test = new byte[ushort.MaxValue];
-            test[0x0000] = 0xf5; // af -> stack
-            test[0x0001] = 0xc5; // bc -> stack
-            test[0x0002] = 0xd5; // de -> stack
-            test[0x0003] = 0xe5; // hl -> stack
-
-            InitCpu();
+            InitCpu(new byte[] {
+                0xf5, // af -> stack
+                0xc5, // bc -> stack
+                0xd5, // de -> stack
+                0xe5, // hl -> stack
+            });
 
             var afValue = (ushort)0x1122;
             var bcValue = (ushort)0x3344;
@@ -149,13 +140,12 @@ namespace CoreBoyTests
         [TestMethod]
         public void TestLoadFromStack()
         {
-            test = new byte[ushort.MaxValue];
-            test[0x0000] = 0xf1; // stack -> af
-            test[0x0001] = 0xc1; // stack -> bc
-            test[0x0002] = 0xd1; // stack -> de
-            test[0x0003] = 0xe1; // stack -> hl
-
-            InitCpu();
+            InitCpu(new byte[] {
+                0xf1, // stack -> af
+                0xc1, // stack -> bc
+                0xd1, // stack -> de
+                0xe1, // stack -> hl
+            });
 
             var afValue = (ushort)0x1122;
             var bcValue = (ushort)0x3344;

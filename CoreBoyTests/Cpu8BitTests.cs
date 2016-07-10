@@ -10,7 +10,7 @@ namespace CoreBoyTests
         [TestMethod]
         public void TestLoadImmediates()
         {
-            test = new byte[]
+            InitCpu(new byte[]
             {
                 0x06, // Load into b
                 0xf0,
@@ -24,9 +24,7 @@ namespace CoreBoyTests
                 0xf4,
                 0x2e, // Load into l
                 0xf5,
-            };
-
-            InitCpu();
+            });
 
             Assert.AreEqual(cpu.b, 0, $"register b should have been initialized to 0");
             Assert.AreEqual(cpu.c, 0, $"register c should have been initialized to 0");
@@ -48,7 +46,7 @@ namespace CoreBoyTests
         [TestMethod]
         public void TestLoadIntoA()
         {
-            test = new byte[]
+            InitCpu(new byte[]
             {
                 0x7f, // a -> a
                 0x78, // b -> a
@@ -61,9 +59,7 @@ namespace CoreBoyTests
                 // TODO test 0a, 1a, 7e, fa
                 0x3e, // # -> a
                 0xe0,
-            };
-
-            InitCpu();
+            });
 
             var aValue = (byte)0xd0;
             var bValue = (byte)0xd1;
@@ -113,7 +109,7 @@ namespace CoreBoyTests
         [TestMethod]
         public void TestLoadIntoB()
         {
-            test = new byte[]
+            InitCpu(new byte[]
             {
                 0x40, // b -> b
                 0x41, // c -> b
@@ -122,9 +118,7 @@ namespace CoreBoyTests
                 0x44, // h -> b
                 0x45, // l -> b
                 // TODO test 0x46
-            };
-
-            InitCpu();
+            });
 
             var bValue = (byte)0xd1;
             var cValue = (byte)0xd2;
@@ -167,7 +161,7 @@ namespace CoreBoyTests
         [TestMethod]
         public void TestLoadIntoC()
         {
-            test = new byte[]
+            InitCpu(new byte[]
             {
                 0x49, // c -> c
                 0x48, // b -> c
@@ -176,9 +170,7 @@ namespace CoreBoyTests
                 0x4c, // h -> c
                 0x4d, // l -> c
                 // TODO test 0x4e
-            };
-
-            InitCpu();
+            });
 
             var bValue = (byte)0xd1;
             var cValue = (byte)0xd2;
@@ -221,7 +213,7 @@ namespace CoreBoyTests
         [TestMethod]
         public void TestLoadIntoD()
         {
-            test = new byte[]
+            InitCpu(new byte[]
             {
                 0x52, // d -> d
                 0x50, // b -> d
@@ -230,9 +222,7 @@ namespace CoreBoyTests
                 0x54, // h -> d
                 0x55, // l -> d
                 // TODO test 0x56
-            };
-
-            InitCpu();
+            });
 
             var bValue = (byte)0xd1;
             var cValue = (byte)0xd2;
@@ -275,7 +265,7 @@ namespace CoreBoyTests
         [TestMethod]
         public void TestLoadIntoE()
         {
-            test = new byte[]
+            InitCpu(new byte[]
             {
                 0x5b, // e -> e
                 0x58, // b -> e
@@ -284,9 +274,7 @@ namespace CoreBoyTests
                 0x5c, // h -> e
                 0x5d, // l -> e
                 // TODO test 0x5e
-            };
-
-            InitCpu();
+            });
 
             var bValue = (byte)0xd1;
             var cValue = (byte)0xd2;
@@ -329,7 +317,7 @@ namespace CoreBoyTests
         [TestMethod]
         public void TestLoadIntoH()
         {
-            test = new byte[]
+            InitCpu(new byte[]
             {
                 0x64, // h -> h
                 0x60, // b -> h
@@ -338,9 +326,7 @@ namespace CoreBoyTests
                 0x63, // e -> h
                 0x65, // l -> h
                 // TODO test 0x66
-            };
-
-            InitCpu();
+            });
 
             var bValue = (byte)0xd1;
             var cValue = (byte)0xd2;
@@ -383,7 +369,7 @@ namespace CoreBoyTests
         [TestMethod]
         public void TestLoadIntoL()
         {
-            test = new byte[]
+            InitCpu(new byte[]
             {
                 0x6d, // l -> l
                 0x68, // b -> l
@@ -392,9 +378,7 @@ namespace CoreBoyTests
                 0x6b, // e -> l
                 0x6c, // h -> l
                 // TODO test 0x6e
-            };
-
-            InitCpu();
+            });
 
             var bValue = (byte)0xd1;
             var cValue = (byte)0xd2;
@@ -439,7 +423,7 @@ namespace CoreBoyTests
         [TestMethod]
         public void TestLoadAInto()
         {
-            test = new byte[]
+            InitCpu(new byte[]
             {
                 0x7f, // a -> a
                 0x47, // a -> b
@@ -449,9 +433,7 @@ namespace CoreBoyTests
                 0x67, // a -> h
                 0x6f, // a -> l
                 // TODO test 02, 12, 77, ea
-            };
-
-            InitCpu();
+            });
 
             var aValue = (byte)0xd0;
             var bValue = (byte)0xd1;
@@ -500,12 +482,12 @@ namespace CoreBoyTests
         [TestMethod]
         public void TestLoadAddressCIntoA()
         {
-            var expectedValue = (byte)0xd0;
-            test = new byte[ushort.MaxValue];
-            test[0x0000] = 0xf2;
-            test[0xff23] = expectedValue;
+            InitCpu(new byte[] {
+                0xf2,
+            });
 
-            InitCpu();
+            var expectedValue = (byte)0xd0;
+            test[0xff23] = expectedValue;
 
             cpu.c = 0x23;
 
@@ -517,10 +499,9 @@ namespace CoreBoyTests
         [TestMethod]
         public void TestLoadAIntoAddressC()
         {
-            test = new byte[ushort.MaxValue];
-            test[0x0000] = 0xe2;
-
-            InitCpu();
+            InitCpu(new byte[] {
+                0xe2
+            });
 
             var expectedValue = (byte)0xd0;
             cpu.a = expectedValue;
@@ -542,11 +523,10 @@ namespace CoreBoyTests
         [TestMethod]
         public void TestLoadAIntoAddressN()
         {
-            test = new byte[ushort.MaxValue];
-            test[0x0000] = 0xe0;
-            test[0x0001] = 0x23;
-
-            InitCpu();
+            InitCpu(new byte[] {
+                0xe0,
+                0x23,
+            });
 
             var expectedValue = (byte)0xd0;
             cpu.a = expectedValue;
@@ -559,13 +539,13 @@ namespace CoreBoyTests
         [TestMethod]
         public void TestLoadAddressNIntoA()
         {
-            var expectedValue = (byte)0xd0;
-            test = new byte[ushort.MaxValue];
-            test[0x0000] = 0xf0;
-            test[0x0001] = 0x23;
-            test[0xff23] = expectedValue;
+            InitCpu(new byte[] {
+                0xf0,
+                0x23,
+            });
 
-            InitCpu();
+            var expectedValue = (byte)0xd0;
+            test[0xff23] = expectedValue;
 
             cpu.RunOne();
 

@@ -551,7 +551,7 @@ namespace CoreBoy
 
         private void Add(byte val1, byte val2)
         {
-            var temp = val1 + val2;
+            var temp = val1 + val2; // warning: this is an int
             ResetFlag(FlagNegative);
 
             if (temp == 0)
@@ -563,7 +563,7 @@ namespace CoreBoy
                 ResetFlag(FlagZero);
             }
 
-            if ((temp & 0xffff0000) != 0)
+            if ((temp & 0xff00) != 0)
             {
                 SetFlag(FlagCarry);
             }

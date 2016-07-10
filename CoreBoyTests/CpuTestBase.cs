@@ -13,16 +13,21 @@ namespace CoreBoyTests
         [TestInitialize]
         public void Initialize()
         {
-            cpu = null;
-            test = null;
+            cpu = new Cpu(0x0);
+            test = new byte[ushort.MaxValue];
         }
 
-        protected void InitCpu()
+        protected void InitCpu(byte[] aTest = null)
         {
-            cpu = new Cpu(0x0)
+            if (aTest != null)
             {
-                Rom = test
-            };
+                for (var i=0; i<aTest.Length; i++)
+                {
+                    test[i] = aTest[i];
+                }
+            }
+
+            cpu.Rom = test;
         }
 
         protected void TestFlags(bool zeroSet, bool negativeSet, bool carrySet, bool halfCarrySet)
